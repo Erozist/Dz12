@@ -70,7 +70,7 @@ def handler_phone(comand, contact):
 
 @input_error
 def handler_show(*_):
-    return f'Oll list of telephone book: {[record for name, record in book.data.items()]}'
+    return f'Oll list of telephone book: {[str(record) for name, record in book.data.items()]}'
 
 
 @input_error
@@ -79,9 +79,20 @@ def handler_exit(*_):
     return "Good bye!"
 
 
+@input_error
+def handler_search(comand, contact):
+    search_list = []
+    for phone in book.data.values():
+        print(phone, comand[1])
+        # if comand[1] in phone:
+        #     search_list.append(phone)
+    return f'Serch key {comand[1]} contacts {search_list}'
+
+
 OPERATIONS = {
-    'hello': handler_hello, 'add': handler_add, 'change': handler_change, 'phone': handler_phone,
-    'show all': handler_show, 'good bye': handler_exit, 'close': handler_exit, 'exit': handler_exit,
+    'hello': handler_hello, 'add': handler_add, 'change': handler_change,
+    'phone': handler_phone, 'show all': handler_show, 'good bye': handler_exit,
+    'close': handler_exit, 'exit': handler_exit, 'search': handler_search
 }
 
 main()
