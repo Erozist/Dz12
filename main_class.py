@@ -105,8 +105,8 @@ class AddressBook(UserDict):
         return self.data
 
 
-    def add_record(self, args):
-        self.data[args.name.value] = args
+    def add_record(self, number):
+        self.data[number.name.value] = number
         return self.data
 
 
@@ -115,14 +115,14 @@ class AddressBook(UserDict):
             return self.data[name]
 
 
-    def delete(self, name):
-        self.data.pop(name, 'No Key found')
+    def delete(self, name: str):
+        self.data.pop(name, 'Key Not found')
 
 
-    def iterator(self, num):
+    def iterator(self, num: int):
         i = 0
         while i < len(self.data):
-            yield tuple(self.data)[i:i+num]
+            yield tuple(self.data.items())[i:i+num]
             i += num
 
     def write_pickle(self):
@@ -137,37 +137,40 @@ class AddressBook(UserDict):
             return self.data
 
 
-    def have_matches(self, match):
-        list_users = []
-        for contact in self.data.values():
-            print(repr(contact))
-            # if match in contact:
-            #     list_users.append(contact)
-        return list_users
+    def search(self, text: str):
+        searched_text = text.strip().lower()
+        result = []
+        if not searched_text:
+            return result
+        for record in self.data.values():
+            if searched_text in str(record.name.value).lower() + \
+                ' '.join([phone.value for phone in record.phones]):
+                result.append(str(record))
+        return result
 
 
-    # def __str__(self):
-    #     return f'<{self.data}>'
+    def __str__(self):
+        return f'<{self.data}>'
 
 
 if __name__ == "__main__":
     ...
-    # Створення нової адресної книги
-    book = AddressBook()
+    # # Створення нової адресної книги
+    # book = AddressBook()
 
-    # Створення запису для John
-    john_record = Record("John", '20.06.1987')
-    john_record.add_phone("1234567890")
-    john_record.add_phone("5555555555")
-    book.add_record(john_record)
+    # # Створення запису для John
+    # john_record = Record("John", '20.06.1987')
+    # john_record.add_phone("1234567890")
+    # john_record.add_phone("5555555555")
+    # book.add_record(john_record)
 
-    # Створення та додавання нових записів дляперевірки ітератора
-    for i in range(10):
-        john_record = Record('John'+str(i))
-        john_record.add_phone("123456789"+str(i))
-        book.add_record(john_record)
+    # # Створення та додавання нових записів дляперевірки ітератора
+    # for i in range(10):
+    #     john_record = Record('John'+str(i))
+    #     john_record.add_phone("123456789"+str(i))
+    #     book.add_record(john_record)
 
-    print(book.have_matches('123'))
+    # print(book.search('123'))
 
     # # Запис і читання з файлу за допомогою pickle
     # book.write_pickle()

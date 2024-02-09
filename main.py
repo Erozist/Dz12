@@ -9,7 +9,7 @@ def input_error(func):
     def inner(*args):
         try:
             return func(*args)
-        except (IndexError, KeyError, ValueError):
+        except (IndexError, KeyError, ValueError, AttributeError):
             return 'Name or Number not correct!'
     return inner
 
@@ -17,7 +17,6 @@ def input_error(func):
 def main():
     ''' Функція обробки введення виведення '''
     book.file_created()
-    print(book.data)
     while True:
         comand_list = input('Input you comand: ')
         comand = comand_list.lower().split()
@@ -65,7 +64,7 @@ def handler_change(comand, contact):
 
 @input_error
 def handler_phone(comand, contact):
-    return contact.find_phone(comand[2])
+    return f'{book.find(comand[1])}'
 
 
 @input_error
@@ -80,13 +79,8 @@ def handler_exit(*_):
 
 
 @input_error
-def handler_search(comand, contact):
-    search_list = []
-    for phone in book.data.values():
-        print(phone, comand[1])
-        # if comand[1] in phone:
-        #     search_list.append(phone)
-    return f'Serch key {comand[1]} contacts {search_list}'
+def handler_search(comand, _):
+    return f'Serch key <<{comand[1]}>> contacts {book.search(comand[1])}'
 
 
 OPERATIONS = {
